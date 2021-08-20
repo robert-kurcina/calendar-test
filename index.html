@@ -1,418 +1,423 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>ZScaler Take Home from Ajeya</title>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="author" content="Robert Kurcina">
-    <meta name="description" content="a calendar widget">
-    <meta name="keywords" content="jQuery, calendar, widget">
+<head>
+  <title>ZScaler Take Home from Ajeya</title>
 
-    <style>
-    html, body {
-        height: 100%;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="author" content="Robert Kurcina">
+  <meta name="description" content="a calendar widget">
+  <meta name="keywords" content="jQuery, calendar, widget">
+
+  <style>
+    html,
+    body {
+      height: 100%;
     }
 
     .calendar-container {
-         display: -webkit-flex;
-        -webkit-flex-direction: column;
-        height: 100%;
-        background-color: #ffffff;
+      display: -webkit-flex;
+      -webkit-flex-direction: column;
+      height: 100%;
+      background-color: #ffffff;
     }
 
     .calendar-container * {
-        font-family: sans-serif;
-        font-size: 12px;
+      font-family: sans-serif;
+      font-size: 12px;
     }
 
     .calendar-container .nav-week {
-        padding: 10px 10px 20px 0;
-        display: flex;
-        flex-wrap: nowrap;
-        flex-direction: row;
+      padding: 10px 10px 20px 0;
+      display: flex;
+      flex-wrap: nowrap;
+      flex-direction: row;
     }
 
     .calendar-container .button {
-        height: 30px;
-        padding: 5px;
+      height: 30px;
+      padding: 5px;
 
-        box-shadow: 0 0 3px rgba(0,0,0,0.25);
-        border: none;
-        background-color: #ffffff;
-        cursor: pointer;
+      box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
+      border: none;
+      background-color: #ffffff;
+      cursor: pointer;
 
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        text-align: center;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
     }
 
     .calendar-container .button:hover {
-        background-color: #333333;
-        color: #ffffff;
-        box-shadow: 0 0 5px rgba(0,0,0,0.25);
+      background-color: #333333;
+      color: #ffffff;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
     }
 
     .calendar-container .nav-week .button.choose-today {
-        padding: 5px;
-        width: 100px;
+      padding: 5px;
+      width: 100px;
     }
 
     .calendar-container .nav-week .button.left-arrow,
     .calendar-container .nav-week .button.right-arrow {
-        width: 30px;
-        font-weight: bold;
-        margin-left: 10px;
+      width: 30px;
+      font-weight: bold;
+      margin-left: 10px;
     }
 
     .calendar-container .nav-week .current-month-year {
-        padding: 5px;
-        width: 300px;
+      padding: 5px;
+      width: 300px;
 
-        padding-left: 20px;
-        font-size: 20px;
-        text-align: left;
+      padding-left: 20px;
+      font-size: 20px;
+      text-align: left;
     }
 
     .calendar-container .main {
-        display: -webkit-flex;
-        -webkit-flex-direction: column;
-        height: 100%;
-        padding: 10px;
+      display: -webkit-flex;
+      -webkit-flex-direction: column;
+      height: 100%;
+      padding: 10px;
     }
 
-    .calendar-container .main .header {
-
-    }
+    .calendar-container .main .header {}
 
     .calendar-container .main .header .header-hours {
-        border-bottom: 2px solid #dddddd;
+      border-bottom: 2px solid #dddddd;
     }
 
     .calendar-container .main .header .header-days {
-        display: flex;
-        flex-wrap: nowrap;
-        flex-direction: row;
-        border-bottom: 2px solid #666666;
-        border-top: 1px solid #dddddd;
-        box-shadow: 0 0 5px rgba(0,0,0,0.25);
+      display: flex;
+      flex-wrap: nowrap;
+      flex-direction: row;
+      border-bottom: 2px solid #666666;
+      border-top: 1px solid #dddddd;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
     }
 
     .calendar-container .main .header .header-days .day {
-        min-width: 50px;
-        max-width: 300px;
-        width: 14.5%;
-        padding: 5px;
-        border-right: 1px solid #dddddd;
+      min-width: 50px;
+      max-width: 300px;
+      width: 14.5%;
+      padding: 5px;
+      border-right: 1px solid #dddddd;
     }
 
     .calendar-container .main .header .header-days .day.hour {
-        min-width: 50px;
-        max-width: 100px;
-        width: 75px;
+      min-width: 50px;
+      max-width: 100px;
+      width: 75px;
     }
 
     .calendar-container .main .header .header-days .day-name {
-        font-size: 14px;
+      font-size: 14px;
     }
 
     .calendar-container .main .header .header-days .day-number {
-        font-size: 36px;
-        font-weight: bold;
+      font-size: 36px;
+      font-weight: bold;
     }
 
     .calendar-container .main .rows {
-        -webkit-flex: 1 1 auto;
-        overflow-y: scroll;
-        display: block;
-        border-bottom: 1px solid #dddddd;
+      -webkit-flex: 1 1 auto;
+      overflow-y: scroll;
+      display: block;
+      border-bottom: 1px solid #dddddd;
     }
 
     .calendar-container .main .rows .row {
-        display: flex;
-        flex-wrap: nowrap;
-        flex-direction: row;
-        min-height: 30px;
-        height: 50px;
-        max-height: 200px;
-        overflow: hidden;
+      display: flex;
+      flex-wrap: nowrap;
+      flex-direction: row;
+      min-height: 30px;
+      height: 50px;
+      max-height: 200px;
+      overflow: hidden;
     }
 
     .calendar-container .main .rows .hour {
-        background-color: #eeeeee;
-        min-width: 50px;
-        max-width: 100px;
-        width: 75px;
-        text-align: center;
-        padding: 5px;
-        border-bottom: 1px solid #fefefe;
+      background-color: #eeeeee;
+      min-width: 50px;
+      max-width: 100px;
+      width: 75px;
+      text-align: center;
+      padding: 5px;
+      border-bottom: 1px solid #fefefe;
     }
 
     .calendar-container .main .rows .row .cell {
-        background-color: #ffffff;
-        min-width: 50px;
-        max-width: 300px;
-        width: 14.5%;
-        padding: 5px;
-        border: 1px solid transparent;
-        border-bottom: 1px solid #dddddd;
-        border-right: 1px solid #dddddd;
+      background-color: #ffffff;
+      min-width: 50px;
+      max-width: 300px;
+      width: 14.5%;
+      padding: 5px;
+      border: 1px solid transparent;
+      border-bottom: 1px solid #dddddd;
+      border-right: 1px solid #dddddd;
     }
 
     .calendar-container .main .rows .row .cell:hover {
-        border: 1px solid #ff0000;
+      border: 1px solid #ff0000;
     }
 
     .calendar-container .main .rows .row .cell.event {
-        cursor: pointer;
-        background-color: #ff9999;
-        border: 1px solid #990000;
+      cursor: pointer;
+      background-color: #ff9999;
+      border: 1px solid #990000;
     }
 
     .calendar-container .main .rows .row .cell.event:hover {
-        background-color: #333333;
-        color: #ffffff;
-        border: 1px solid #000000;
+      background-color: #333333;
+      color: #ffffff;
+      border: 1px solid #000000;
     }
-    </style>
+  </style>
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.5.3/modernizr.min.js" type="text/javascript"></script>
-    <script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.5.3/modernizr.min.js" type="text/javascript"></script>
+  <script>
     function paintCalender(events) {
-  var eventHash = {};
-  var eventGrid = [];
-  var eventList = [];
+      var eventHash = {};
+      var eventGrid = [];
+      var eventList = [];
 
-  var locale = 'en-US';
-  var currentMonth = 'Jan 14 2018';
-  var timezone = 'GMT-0800'; //NOT USED
-  var currentDate = new Date(currentMonth);
+      var locale = 'en-US';
+      var currentMonth = 'Jan 14 2018';
+      var timezone = 'GMT-0800'; //NOT USED
+      var currentDate = new Date(currentMonth);
 
-  $(function() {
-    cleanEventGrid(eventGrid);
-    cleanEvents(events, eventList);
+      $(function() {
+        cleanEventGrid(eventGrid);
+        cleanEvents(events, eventList);
 
-    buildEventGrid(eventList, eventHash, eventGrid);
-    buildCalendar(currentDate, locale, eventGrid, eventHash);
-    bindButtons(eventHash);
-  });
-}
-
-function bindButtons(eventHash, eventGrid) {
-  $('.choose-today').on('click', function(e) {
-    alert('TODAY');
-  });
-
-  $('.left-arrow').on('click', function(e) {
-    alert('LEFT');
-  });
-
-  $('.right-arrow').on('click', function(e) {
-    alert('RIGHT');
-  });
-
-  $('.rows').on('click', function(e) {
-    handleClick(e, eventHash);
-  });
-}
-
-function cleanEventGrid(eventGrid) {
-  var numDays = 7;
-
-  for (var day = 0; day < numDays; day++) {
-    eventGrid[day] = [];
-  }
-}
-
-function cleanEvents(events, eventList) {
-  var numEvents = events.length;
-
-  for (var i = 0; i < numEvents; i++) {
-    var eventEntry = events[i];
-
-    var eventId = eventEntry.id;
-    var eventName = eventEntry.name;
-    var eventStart = eventEntry.startTime;
-    var eventEnd = eventEntry.endTime;
-
-    var startObj = new Date(eventStart);
-    var endObj = new Date(eventEnd);
-
-    if (eventId === null || eventName === '' || !startObj || !endObj || startObj.toString() === 'Invalid Date' || endObj.toString() === 'Invalid Date') {
-      console.log('bad event entry', eventEntry);
-    } else {
-      var eventObj = {
-        id: eventId,
-        name: eventName,
-        startTime: startObj,
-        endTime: endObj,
-        durationHours: getEventDuration(startObj, endObj)
-      };
-
-      eventList.push(eventObj);
+        buildEventGrid(eventList, eventHash, eventGrid);
+        buildCalendar(currentDate, locale, eventGrid, eventHash);
+        bindButtons(eventHash);
+      });
     }
-  }
-}
 
-function buildEventGrid(eventList, eventHash, eventGrid) {
-  var numEvents = eventList.length;
+    function bindButtons(eventHash, eventGrid) {
+      $('.choose-today').on('click', function(e) {
+        alert('TODAY');
+      });
 
-  for (var i = 0; i < numEvents; i++) {
-    var eventEntry = eventList[i];
+      $('.left-arrow').on('click', function(e) {
+        alert('LEFT');
+      });
 
-    var eventId = eventEntry.id;
-    var eventName = eventEntry.name;
-    var eventStart = eventEntry.startTime;
-    var eventDuration = eventEntry.durationHours;
+      $('.right-arrow').on('click', function(e) {
+        alert('RIGHT');
+      });
 
-    eventHash[eventId] = eventEntry;
+      $('.rows').on('click', function(e) {
+        handleClick(e, eventHash);
+      });
+    }
 
-    var startHour = eventStart.getHours();
-    var startDay = eventStart.getDay();
-    var hour = startHour + 1;
-    var day = startDay;
+    function cleanEventGrid(eventGrid) {
+      var numDays = 7;
 
-    for (var j = 0; j < eventDuration; j++) {
-      if (hour > 23) {
-        hour = 0;
-        day++;
+      for (var day = 0; day < numDays; day++) {
+        eventGrid[day] = [];
+      }
+    }
+
+    function cleanEvents(events, eventList) {
+      var numEvents = events.length;
+
+      for (var i = 0; i < numEvents; i++) {
+        var eventEntry = events[i];
+
+        var eventId = eventEntry.id;
+        var eventName = eventEntry.name;
+        var eventStart = eventEntry.startTime;
+        var eventEnd = eventEntry.endTime;
+
+        var startObj = new Date(eventStart);
+        var endObj = new Date(eventEnd);
+
+        if (eventId === null || eventName === '' || !startObj || !endObj || startObj.toString() === 'Invalid Date' || endObj.toString() === 'Invalid Date') {
+          console.log('bad event entry', eventEntry);
+        } else {
+          var eventObj = {
+            id: eventId,
+            name: eventName,
+            startTime: startObj,
+            endTime: endObj,
+            durationHours: getEventDuration(startObj, endObj)
+          };
+
+          eventList.push(eventObj);
+        }
+      }
+    }
+
+    function buildEventGrid(eventList, eventHash, eventGrid) {
+      var numEvents = eventList.length;
+
+      for (var i = 0; i < numEvents; i++) {
+        var eventEntry = eventList[i];
+
+        var eventId = eventEntry.id;
+        var eventName = eventEntry.name;
+        var eventStart = eventEntry.startTime;
+        var eventDuration = eventEntry.durationHours;
+
+        eventHash[eventId] = eventEntry;
+
+        var startHour = eventStart.getHours();
+        var startDay = eventStart.getDay();
+        var hour = startHour + 1;
+        var day = startDay;
+
+        for (var j = 0; j < eventDuration; j++) {
+          if (hour > 23) {
+            hour = 0;
+            day++;
+          }
+
+          eventGrid[day][hour++] = eventId;
+        }
+      }
+    }
+
+    function buildCalendar(currentDate, locale, eventGrid, eventHash) {
+      setNavDate(currentDate, locale);
+      createWeek(currentDate, locale);
+      createRows(eventGrid, eventHash);
+    }
+
+    function getEventDuration(dateStart, dateEnd) {
+      var delta = dateEnd - dateStart;
+      var hours = delta / (3600 * 1000);
+
+      return hours;
+    }
+
+    function setNavDate(currentDate, locale) {
+      var monthName = currentDate.toLocaleString(locale, {
+        month: 'long'
+      });
+      var fullYear = currentDate.getFullYear();
+      var todayStr = monthName + ' ' + fullYear;
+
+      $('.current-month-year').html(todayStr);
+    }
+
+    function createWeek(currentDate, locale) {
+      var weekElem = $('.header-days');
+      var firstDay = currentDate.getDate() - currentDate.getDay();
+
+      var numDays = 7;
+      for (var i = 0; i < numDays; i++) {
+        var nextDay = new Date(currentDate.setDate(firstDay + i));
+        var dayNumber = nextDay.getDate();
+        var dayName = nextDay.toLocaleString(locale, {
+          weekday: 'short'
+        });
+        var dayElem = $('<div class="day"></div>');
+
+        $(dayElem).append('<div class="day-name">' + dayName + '</div>');
+        $(dayElem).append('<div class="day-number">' + dayNumber + '</div>');
+        $(weekElem).append(dayElem);
+      }
+    }
+
+    function createRows(eventGrid, eventHash) {
+      var rowsElem = $('.rows');
+      var numRows = 24;
+
+      for (var hour = 0; hour < numRows; hour++) {
+        var rowElem = createRow(hour, eventGrid, eventHash);
+        $(rowsElem).append(rowElem);
+      }
+    }
+
+    function createRow(hour, eventGrid, eventHash) {
+      var zuluHour = hour < 10 ? '0' + hour + '00' : hour + '00';
+      var rowElem = $('<div class="row" data-hour="' + zuluHour + '"></div>');
+      var hourElem = $('<div class="hour">' + zuluHour + '</div>');
+
+      rowElem.append(hourElem);
+
+      var numCells = 7;
+      var cellElem;
+      for (var day = 0; day < numCells; day++) {
+        var eventId = eventGrid[day][hour];
+
+        if (eventId) {
+          var eventItem = eventHash[eventId];
+          var eventName = eventItem.name;
+
+          cellElem = $('<div class="cell event" data-id="' + eventId + '">' + eventName + '</div>');
+        } else {
+          cellElem = $('<div class="cell"></div>');
+        }
+
+        rowElem.append(cellElem);
       }
 
-      eventGrid[day][hour++] = eventId;
-    }
-  }
-}
-
-function buildCalendar(currentDate, locale, eventGrid, eventHash) {
-  setNavDate(currentDate, locale);
-  createWeek(currentDate, locale);
-  createRows(eventGrid, eventHash);
-}
-
-function getEventDuration(dateStart, dateEnd) {
-  var delta = dateEnd - dateStart;
-  var hours = delta / (3600 * 1000);
-
-  return hours;
-}
-
-function setNavDate(currentDate, locale) {
-  var monthName = currentDate.toLocaleString(locale, { month: 'long' });
-  var fullYear = currentDate.getFullYear();
-  var todayStr = monthName + ' ' + fullYear;
-
-  $('.current-month-year').html(todayStr);
-}
-
-function createWeek(currentDate, locale) {
-  var weekElem = $('.header-days');
-  var firstDay = currentDate.getDate() - currentDate.getDay();
-
-  var numDays = 7;
-  for (var i = 0; i < numDays; i++) {
-    var nextDay = new Date(currentDate.setDate(firstDay + i));
-    var dayNumber = nextDay.getDate();
-    var dayName = nextDay.toLocaleString(locale, { weekday: 'short' });
-    var dayElem = $('<div class="day"></div>');
-
-    $(dayElem).append('<div class="day-name">' + dayName + '</div>');
-    $(dayElem).append('<div class="day-number">' + dayNumber + '</div>');
-    $(weekElem).append(dayElem);
-  }
-}
-
-function createRows(eventGrid, eventHash) {
-  var rowsElem = $('.rows');
-  var numRows = 24;
-
-  for (var hour = 0; hour < numRows; hour++) {
-    var rowElem = createRow(hour, eventGrid, eventHash);
-    $(rowsElem).append(rowElem);
-  }
-}
-
-function createRow(hour, eventGrid, eventHash) {
-  var zuluHour = hour < 10 ? '0' + hour + '00' : hour + '00';
-  var rowElem = $('<div class="row" data-hour="' + zuluHour + '"></div>');
-  var hourElem = $('<div class="hour">' + zuluHour + '</div>');
-
-  rowElem.append(hourElem);
-
-  var numCells = 7;
-  var cellElem;
-  for (var day = 0; day < numCells; day++) {
-    var eventId = eventGrid[day][hour];
-
-    if (eventId) {
-      var eventItem = eventHash[eventId];
-      var eventName = eventItem.name;
-
-      cellElem = $('<div class="cell event" data-id="' + eventId + '">' + eventName + '</div>');
-    } else {
-      cellElem = $('<div class="cell"></div>');
+      return rowElem;
     }
 
-    rowElem.append(cellElem);
-  }
+    function handleClick(e, eventHash) {
+      var eventEntryId = $(e.target).attr('data-id');
+      var eventObj = eventHash[eventEntryId];
 
-  return rowElem;
-}
+      var eventName = eventObj.name;
+      var eventDuration = eventObj.durationHours;
 
-function handleClick(e, eventHash) {
-  var eventEntryId = $(e.target).attr('data-id');
-  var eventObj = eventHash[eventEntryId];
+      console.log('EVENT: ' + eventName + ' > ' + eventDuration + ' hours');
+    }
+  </script>
+  <script type="text/javascript">
+    var sampleEvents = [{
+        id: '0001',
+        name: 'Boston Marathon',
+        startTime: 'Sun Jan 14 2018 02:00:00 GMT-0700 (PDT)',
+        endTime: 'Sun Jan 14 2018 06:00:00 GMT-0700 (PDT)'
+      },
+      {
+        id: '0002',
+        name: 'Boston Cupcake',
+        startTime: 'Tue Jan 16 2018 09:00:00 GMT-0700 (PDT)',
+        endTime: 'Tue Jan 16 2018 12:00:00 GMT-0700 (PDT)'
+      },
+      {
+        id: '0003',
+        name: 'Kanban Training',
+        startTime: 'Tue 16 2018 08:00:00 GMT-0700 (PDT)',
+        endTime: 'Wed 17 2018 11:00:00 GMT-0700 (PDT)'
+      }
+    ];
 
-  var eventName = eventObj.name;
-  var eventDuration = eventObj.durationHours;
+    paintCalender(sampleEvents);
+  </script>
+</head>
 
-  console.log('EVENT: ' + eventName + ' > ' + eventDuration + ' hours');
-}
-</script>
-        <script type="text/javascript">
-        var sampleEvents = [
-  {
-    id: '0001',
-    name: 'Boston Marathon',
-    startTime: 'Sun Jan 14 2018 02:00:00 GMT-0700 (PDT)',
-    endTime: 'Sun Jan 14 2018 06:00:00 GMT-0700 (PDT)'
-  },
-  {
-    id: '0002',
-    name: 'Boston Cupcake',
-    startTime: 'Tue Jan 16 2018 09:00:00 GMT-0700 (PDT)',
-    endTime: 'Tue Jan 16 2018 12:00:00 GMT-0700 (PDT)'
-  },
-  {
-    id: '0003',
-    name: 'Kanban Training',
-    startTime: 'Tue 16 2018 08:00:00 GMT-0700 (PDT)',
-    endTime: 'Wed 17 2018 11:00:00 GMT-0700 (PDT)'
-  }
-];
-
-paintCalender(sampleEvents);
-</script>
-  </head>
-  <body>
-    <div class="calendar-container">
-      <div class="main">
-        <div class="header">
-          <div class="nav-week">
-            <div class="button choose-today">TODAY</div>
-            <div class="button left-arrow">&lt;</div>
-            <div class="button right-arrow">&gt;</div>
-            <div class="current-month-year">-</div>
-          </div>
-          <div class="header-days">
-            <div class="day hour">
-              <div class="day-name">&nbsp;</div>
-              <div class="day-number">&nbsp;</div>
-            </div>
+<body>
+  <div class="calendar-container">
+    <div class="main">
+      <div class="header">
+        <div class="nav-week">
+          <div class="button choose-today">TODAY</div>
+          <div class="button left-arrow">&lt;</div>
+          <div class="button right-arrow">&gt;</div>
+          <div class="current-month-year">-</div>
+        </div>
+        <div class="header-days">
+          <div class="day hour">
+            <div class="day-name">&nbsp;</div>
+            <div class="day-number">&nbsp;</div>
           </div>
         </div>
-        <div class="rows"></div>
+      </div>
+      <div class="rows"></div>
     </div>
-  </body>
+</body>
+
 </html>
