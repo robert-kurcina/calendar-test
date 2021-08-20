@@ -23,3 +23,7 @@ Send it over to the recruiter when you are done within 5 hours of receiving it.
 * When an event on the calendar is clicked, you must log the event name and duration to the browser console.
 * Use of third party libraries like moment.js, date.js is not allowed. You may use jQuery if you prefer.
 * **Clearly state any other assumptions you may make**
+
+
+##### Rendered Result
+see https://robert-kurcina.github.io/calendar-test/
